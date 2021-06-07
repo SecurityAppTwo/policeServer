@@ -7,16 +7,17 @@ const kidnappingEvents = "SELECT * FROM kidnapping_event";
 const accidentEvents = "SELECT * FROM accident_event";
 const shootingEvents = "SELECT * FROM shooting_event";
 const stabbingEvents = "SELECT * FROM stabbing_event";
+const eventsQueries = [
+  kidnappingEvents,
+  accidentEvents,
+  shootingEvents,
+  stabbingEvents
+];
 
-router.get("/kidnappingEvents", function(req, res) {
-  client
-    .query(kidnappingEvents)
-    .then(result => {
-      res.send(result.rows);
-    })
-    .catch(error => {
-      res.status(500).send(error ? error.message : "error");
-    });
+router.get("/allEvents", function(req, res) {
+  Promise.all(eventsQueries.map(query => client.query(query))).then(results =>
+    res.send(results.map(result => result.rows))
+  );
 });
 
 /* GET home page. */
