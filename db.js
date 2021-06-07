@@ -1,12 +1,16 @@
 const { Client } = require('pg');
 
 const db = new Client({
-    user: 'postgres',
+    user: 'admin',
     host: '127.0.0.1',
-    database: 'scurityapptwodb',
+    database: 'securityapptwodb',
     password: 'mtgand6',
     port: 31000,
 });
 
+db
+  .connect()
+  .then(() => console.log('connected'))
+  .catch(err => console.log('connection error', err.stack));
 
-db.connect();
+  module.exports = db;
