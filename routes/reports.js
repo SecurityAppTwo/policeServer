@@ -18,14 +18,14 @@ router.post("/add/KidnapEvent", function(req, res) {
         "חטיפה"
         )`
     client
-    .query()
+    .query(addKidnapQuery)
     .then(() => res.send("Success"))
     .catch(error => res.status(500)
     .send(error? error.message : "error"))
 });
 
 router.post("/add/stabbingEvent", function(req, res) {
-    const addKidnapQuery = `INSERT INTO stabbing_event (
+    const addStabbingQuery = `INSERT INTO stabbing_event (
         stabber, weapon_type, injured_count, date, reprted_by, injured_type, lon, lat, type
     )
     VALUES(${req.params.stabber},
@@ -39,14 +39,14 @@ router.post("/add/stabbingEvent", function(req, res) {
         "דקירה"
         )`
         client
-    .query()
+    .query(addStabbingQuery)
     .then(() => res.send("Success"))
     .catch(error => res.status(500)
     .send(error? error.message : "error"))
 });
 
 router.post("/add/accidentEvent", function(req, res) {
-    const addKidnapQuery = `INSERT INTO accident_event (
+    const addAccidentQuery = `INSERT INTO accident_event (
         injured, driver, injured_count, date, reprted_by, report_date, lon, lat, type
     )
     VALUES(${req.params.injured},
@@ -60,28 +60,28 @@ router.post("/add/accidentEvent", function(req, res) {
         "תאונה"
         )`
         client
-    .query()
+    .query(addAccidentQuery)
     .then(() => res.send("Success"))
     .catch(error => res.status(500)
     .send(error? error.message : "error"))
 });
 
-router.post("/add/stabbingEvent", function(req, res) {
-    const addKidnapQuery = `INSERT INTO shooting_event (
-        shooter, weapon_type, injured_count, date, reprted_by, injured_type, lon, lat, type
+router.post("/add/shootingEvent", function(req, res) {
+    const addShootingQuery = `INSERT INTO shooting_event (
+        shooter, weapon_type, injured_count, date, reported_by, injured_type, lon, lat, type
     )
     VALUES(${req.params.shooter},
         ${req.params.weaponType},
         ${req.params.injuredCount},
         ${req.params.date},
         1,
-        ${req.params.reprotDate},
+        ${req.params.reportDate},
         ${req.params.lon},
         ${req.params.lat},
         "ירי"
         )`
         client
-    .query()
+    .query(addShootingQuery)
     .then(() => res.send("Success"))
     .catch(error => res.status(500)
     .send(error? error.message : "error"))
