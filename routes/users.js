@@ -15,7 +15,7 @@ router.get('/validateUser', (req, res, next) => {
   const query = `SELECT id FROM activity_user WHERE user_name='${username}' AND password='${password}'`;
   client
     .query(query)
-    .then(result => res.send(result.rowCount > 0))
+    .then(result => res.send({isValid: result.rowCount > 0}))
     .catch(error => res.status(errorStatusCode).send(error))
 });
 
