@@ -9,13 +9,14 @@ const shootingEvents = "SELECT * FROM shooting_event";
 const stabbingEvents = "SELECT * FROM stabbing_event";
 
 router.get("/kidnappingEvents", function(req, res) {
-  client.query(kidnappingEvents, function(err, result) {
-    if (err) {
-      console.log(err.message);
-      throw err;
-    }
-    res.send(result.rows);
-  });
+  client
+    .query(kidnappingEvents)
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(error => {
+      res.status(500).send(error ? error.message : "error");
+    });
 });
 
 /* GET home page. */
