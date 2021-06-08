@@ -13,6 +13,7 @@ const sub= require('./routes/subscription.js');
 const subscriptionRouter=sub.router;
 const sendEventsToAll=sub.sendEventsToAll;
 
+var deRouter = require('./routes/de');
 
 var app = express();
 
@@ -33,6 +34,7 @@ app.use('/reports', reportsRouter);
 app.use('/map', mapRouter);
 app.use('/users', usersRouter);
 app.use('/',subscriptionRouter);
+app.use('/de', deRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
