@@ -1,4 +1,4 @@
-const { Client } = require('pg');
+const { Client } = require("pg");
 
 const db = new Client({
     user: 'admin',
@@ -8,9 +8,8 @@ const db = new Client({
     port: 5432,
 });
 
-db
-  .connect()
-  .then(() => console.log('connected'))
-  .catch(err => console.log('connection error', err.stack));
+db.connect()
+  .then(() => console.log("connected"))
+  .catch(err => console.log("connection error", err.stack));
 
-  module.exports = db;
+module.exports = db;
