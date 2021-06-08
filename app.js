@@ -3,12 +3,21 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require('cors');
 
+
+var reportsRouter = require('./routes/reports');
 var mapRouter = require('./routes/map');
 var usersRouter = require('./routes/users');
+const sub= require('./routes/subscription.js');
+const subscriptionRouter=sub.router;
+const sendEventsToAll=sub.sendEventsToAll;
+
 var deRouter = require('./routes/de');
 
 var app = express();
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -19,9 +28,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
+app.use('/reports', reportsRouter);
 app.use('/map', mapRouter);
 app.use('/users', usersRouter);
+app.use('/',subscriptionRouter);
 app.use('/de', deRouter);
 
 // catch 404 and forward to error handler
