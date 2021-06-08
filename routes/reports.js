@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 const client = require('./../db');
 const moment = require('moment')
+const sendEventsToAll=require('./subscription.js')
 
 
 router.post('/add/kidnapEvent', function(req, res) {
@@ -17,18 +18,22 @@ router.post('/add/kidnapEvent', function(req, res) {
         '${req.body.kidnapped}',
         '${req.body.lastLocation}',
         '${date}',
-        ${req.body.reportedBy},
+        '${req.body.reportedBy}',
         '${reportDate}',
-        ${req.body.lon},
-        ${req.body.lat},
+        '${req.body.lon}',
+        '${req.body.lat}',
         'חטיפה'
         )`;
     client
     .query(addKidnapQuery)
     .then(() => res.send('Success'))
+    .then(()=>sendEventsToAll({...req.body, type: 'חטיפה'}))
     .catch(error => res.status(500)
     .send(error? error.message : 'error'))
 });
+
+
+  
 
 router.post('/add/stabbingEvent', function(req, res) {
     var formatter= 'YYYY-MM-DD';
@@ -41,15 +46,16 @@ router.post('/add/stabbingEvent', function(req, res) {
         '${req.body.weaponType}',
         ${req.body.injuredCount},
         '${date}',
-        ${req.body.reportedBy},
-        ${req.body.injuredType},
-        ${req.body.lon},
-        ${req.body.lat},
+        '${req.body.reportedBy}',
+        '${req.body.injuredType}',
+        '${req.body.lon}',
+        '${req.body.lat}',
         'דקירה'
         )`
         client
     .query(addStabbingQuery)
     .then(() => res.send('Success'))
+    .then(()=>sendEventsToAll({...req.body, type: 'דקירה'}))
     .catch(error => res.status(500)
     .send(error? error.message : 'error'))
 });
@@ -76,6 +82,7 @@ router.post('/add/accidentEvent', function(req, res) {
         client
     .query(addAccidentQuery)
     .then(() => res.send('Success'))
+    .then(()=>sendEventsToAll({...req.body, type: 'תאונה'}))
     .catch(error => res.status(500)
     .send(error? error.message : 'error'))
 });
@@ -100,6 +107,7 @@ router.post('/add/shootingEvent', function(req, res) {
         client
     .query(addShootingQuery)
     .then(() => res.send('Success'))
+    .then(()=>sendEventsToAll({...req.body, type: 'ירי'}))
     .catch(error => res.status(500)
     .send(error? error.message : 'error'))
 })
