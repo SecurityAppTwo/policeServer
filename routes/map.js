@@ -62,9 +62,11 @@ router.post("/addEvent", async function(req, res) {
       VALUES (${"'" + eventDetails.shooter + "'"}, ${"'" +
         eventDetails.weapon_type +
         "'"}, ${eventDetails.injured_count}, ${"'" + eventDetails.date + "'"},
-        ${eventDetails.reported_by}, ${eventDetails.injured_type}, ${
-        eventDetails.lon
-      }, ${eventDetails.lat}, ${"'" + eventDetails.type + "'"});`;
+        ${eventDetails.reported_by}, ${"'" +
+        eventDetails.injured_type +
+        "'"}, ${eventDetails.lon}, ${eventDetails.lat}, ${"'" +
+        eventDetails.type +
+        "'"});`;
       await client.query(insertQuery);
       res.end();
       break;
@@ -75,9 +77,11 @@ router.post("/addEvent", async function(req, res) {
       VALUES (${"'" + eventDetails.stabber + "'"}, ${"'" +
         eventDetails.weapon_type +
         "'"}, ${eventDetails.injured_count}, ${"'" + eventDetails.date + "'"},
-        ${eventDetails.reported_by}, ${eventDetails.injured_type}, ${
-        eventDetails.lon
-      }, ${eventDetails.lat}, ${"'" + eventDetails.type + "'"});`;
+        ${eventDetails.reported_by}, ${"'" +
+        eventDetails.injured_type +
+        "'"}, ${eventDetails.lon}, ${eventDetails.lat}, ${"'" +
+        eventDetails.type +
+        "'"});`;
       await client.query(insertQuery);
       res.end();
       break;
