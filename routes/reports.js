@@ -2,7 +2,8 @@ var express = require("express");
 var router = express.Router();
 const client = require("./../db");
 const moment = require("moment");
-const sendEventsToAll = require("./subscription.js");
+const sub = require("./subscription.js");
+const sendEventsToAll=sub.sendEventsToAll;
 
 router.post("/add/kidnapEvent", function(req, res) {
   var formatter = "YYYY-MM-DD";
@@ -25,7 +26,7 @@ router.post("/add/kidnapEvent", function(req, res) {
         )`;
   client
     .query(addKidnapQuery)
-    .then(() => res.send("Success"))
+    // .then(() => res.send("Success"))
     .then(() => sendEventsToAll({ ...req.body, type: "חטיפה" }))
     .catch(error => res.status(500).send(error ? error.message : "error"));
 });
