@@ -92,7 +92,7 @@ router.post("/add/shootingEvent", function(req, res) {
         ${req.body.injuredCount},
         '${req.body.date}',
         ${req.body.reportedBy},
-        ${req.body.injuredType},
+        '${req.body.injuredType}',
         ${req.body.lon},
         ${req.body.lat},
         'ירי'
@@ -101,7 +101,10 @@ router.post("/add/shootingEvent", function(req, res) {
     .query(addShootingQuery)
     .then(() => res.send("Success"))
     .then(() => sendEventsToAll({ ...req.body, type: "ירי" }))
-    .catch(error => res.status(500).send(error ? error.message : "error"));
+    .catch(error => {
+      console.log(error.message);
+      res.status(500).send(error ? error.message : "error");
+    });
 });
 
 const kidnappingEvents = "SELECT * FROM kidnapping_event ORDER BY date";
