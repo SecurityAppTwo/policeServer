@@ -155,14 +155,16 @@ function eventsHandler(request, response, next) {
     };
 
     clients.push(newClient);
-//     request.on('close', () => {
-//         console.log(`${clientId} Connection closed`);
-//         clients = clients.filter(client => client.id !== clientId);
-//     });
+    request.on('close', () => {
+        console.log(`${clientId} Connection closed`);
+        clients = clients.filter(client => client.id !== clientId);
+    });
 
 }
 
 router.get('/subscribe', eventsHandler);
+
+router.get('/status', (request, response) => response.json({ clients: clients.length }));
 
 
 const sendEventsToAll=(newFact)=> {
