@@ -33,7 +33,7 @@ function eventsHandler(request, response, next) {
 
 }
 
-router.get('/events', eventsHandler);
+router.get('/subscribe', eventsHandler);
 
 
 const sendEventsToAll=(newFact)=> {
