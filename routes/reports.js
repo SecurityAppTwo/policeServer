@@ -107,28 +107,6 @@ router.post("/add/shootingEvent", function(req, res) {
     });
 });
 
-const kidnappingEvents =
-  "SELECT type, last_location , date FROM kidnapping_event ORDER BY date";
-const accidentEvents =
-  "SELECT type, injured_count ,date FROM accident_event ORDER BY date";
-const shootingEvents =
-  "SELECT type, injured_count , date FROM shooting_event ORDER BY date";
-const stabbingEvents =
-  "SELECT type, injured_count , date FROM stabbing_event ORDER BY date";
-const allEvents = [
-  kidnappingEvents,
-  accidentEvents,
-  shootingEvents,
-  stabbingEvents
-];
-
-/*Get request that returns all the events with their dates and x,y coordinates */
-router.get("/allEventsReported", function(req, res) {
-  Promise.all(allEvents.map(query => client.query(query))).then(results =>
-    res.send(results.map(result => result.rows))
-  );
-});
-
 const kidnappingEvents = "SELECT * FROM kidnapping_event ORDER BY date";
 const accidentEvents = "SELECT * FROM accident_event ORDER BY date";
 const shootingEvents = "SELECT * FROM shooting_event ORDER BY date";
