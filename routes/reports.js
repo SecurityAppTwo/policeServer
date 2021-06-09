@@ -92,7 +92,7 @@ router.post("/add/shootingEvent", function(req, res) {
         ${req.body.injuredCount},
         '${req.body.date}',
         ${req.body.reportedBy},
-        '${req.body.injuredType}',
+        ${req.body.injuredType},
         ${req.body.lon},
         ${req.body.lat},
         'ירי'
@@ -101,10 +101,7 @@ router.post("/add/shootingEvent", function(req, res) {
     .query(addShootingQuery)
     .then(() => res.send("Success"))
     .then(() => sendEventsToAll({ ...req.body, type: "ירי" }))
-    .catch(error => {
-      console.log(error.message);
-      res.status(500).send(error ? error.message : "error");
-    });
+    .catch(error => res.status(500).send(error ? error.message : "error"));
 });
 
 const kidnappingEvents = "SELECT * FROM kidnapping_event ORDER BY date";
@@ -125,18 +122,10 @@ router.get("/allEventsReported", function(req, res) {
   );
 });
 
-const kidnappingEventsJoin = `SELECT name FROM activity_user
-LEFT JOIN kidnapping_event ON
-activity_user.id = kidnapping_event.reported_by`;
-const accidentEventsJoin = `SELECT name FROM activity_user
-LEFT JOIN accident_event ON
-activity_user.id = accident_event.reported_by`;
-const shootingEventsJoin = `SELECT name FROM activity_user
-LEFT JOIN shooting_event ON
-activity_user.id = shooting_event.reported_by`;
-const stabbingEventsJoin = `SELECT name FROM activity_user
-LEFT JOIN stabbing_event ON
-activity_user.id = stabbing_event.reported_by`;
+const kidnappingEventsJoin = `SELECT * FROM activity_user`;
+const accidentEventsJoin = `SELECT * FROM activity_user`;
+const shootingEventsJoin = `SELECT * FROM activity_user`;
+const stabbingEventsJoin = `SELECT * FROM activity_user`;
 const allEventsJoin = [
   kidnappingEventsJoin,
   accidentEventsJoin,
