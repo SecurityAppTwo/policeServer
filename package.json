@@ -8,6 +8,10 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
+<<<<<<< HEAD
+=======
+    "curl": "^0.1.4",
+>>>>>>> 59bfada6e29fd35e34643ec45a2cb6eece92d027
     "debug": "~2.6.9",
     "express": "^4.16.4",
     "http-errors": "~1.6.3",
