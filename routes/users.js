@@ -17,13 +17,8 @@ router.get('/validateUser', (req, res, next) => {
   client
     .query(query)
     .then(result => {
-      console.log(result)
       if (result.rowCount > 0){
-        if ((result.rows)[0].isCop){
-          res.send({isValid: true, id : (result.rows)[0].id})
-        } else{
-          res.send({isValid: false})
-        }
+          res.send({isValid: true, isCop: result.rows[0].is_cop, id : (result.rows)[0].id})
       } else{
         res.send({isValid: false})
       }
