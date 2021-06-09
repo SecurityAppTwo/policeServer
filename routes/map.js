@@ -36,7 +36,7 @@ router.post("/addEvent", async function(req, res) {
         eventDetails.lon
       }, ${eventDetails.lat}, ${"'" + eventDetails.type + "'"});`;
       await client.query(insertQuery);
-      res.end();
+      res.send();
       break;
     case "kidnapping_event":
       insertQuery = `
@@ -53,7 +53,7 @@ router.post("/addEvent", async function(req, res) {
         eventDetails.type +
         "'"});`;
       await client.query(insertQuery);
-      res.end();
+      res.send();
       break;
     case "shooting_event":
       insertQuery = `
@@ -68,7 +68,7 @@ router.post("/addEvent", async function(req, res) {
         eventDetails.type +
         "'"});`;
       await client.query(insertQuery);
-      res.end();
+      res.send();
       break;
     case "stabbing_event":
       insertQuery = `
@@ -83,7 +83,7 @@ router.post("/addEvent", async function(req, res) {
         eventDetails.type +
         "'"});`;
       await client.query(insertQuery);
-      res.end();
+      res.send();
       break;
   }
 });
