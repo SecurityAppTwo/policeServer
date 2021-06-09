@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
     cors({
-        origin: '*',
+        origin: '[http://alpha-maps-git-tmzmap2.apps.openforce.openforce.biz/, http://localhost:8080, *]',
     })
 );
 
