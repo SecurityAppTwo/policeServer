@@ -28,7 +28,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+
+app.use(
+    cors({
+        origin: JSON.parse(`${process.env.CORS_ALLOWED_ORIGINS}`),
+    })
+);
 
 app.use('/reports', reportsRouter);
 app.use('/map', mapRouter);
