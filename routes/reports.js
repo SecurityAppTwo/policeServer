@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 const client = require("./../db");
 const moment = require("moment");
-const sendEventsToAll = require("./subscription.js");
+// const sendEventsToAll = require("./subscription.js");
 
 router.post("/add/kidnapEvent", function(req, res) {
   var formatter = "YYYY-MM-DD";
@@ -25,8 +25,8 @@ router.post("/add/kidnapEvent", function(req, res) {
         )`;
   client
     .query(addKidnapQuery)
-    .then(() => res.send("Success"))
     .then(() => sendEventsToAll({ ...req.body, type: "חטיפה" }))
+    .then(() => res.send("Success"))
     .catch(error => res.status(500).send(error ? error.message : "error"));
 });
 
@@ -49,8 +49,8 @@ router.post("/add/stabbingEvent", function(req, res) {
         )`;
   client
     .query(addStabbingQuery)
-    .then(() => res.send("Success"))
     .then(() => sendEventsToAll({ ...req.body, type: "דקירה" }))
+    .then(() => res.send("Success"))
     .catch(error => res.status(500).send(error ? error.message : "error"));
 });
 
@@ -75,8 +75,8 @@ router.post("/add/accidentEvent", function(req, res) {
         )`;
   client
     .query(addAccidentQuery)
-    .then(() => res.send("Success"))
     .then(() => sendEventsToAll({ ...req.body, type: "תאונה" }))
+    .then(() => res.send("Success"))
     .catch(error => res.status(500).send(error ? error.message : "error"));
 });
 
@@ -99,8 +99,8 @@ router.post("/add/shootingEvent", function(req, res) {
         )`;
   client
     .query(addShootingQuery)
-    .then(() => res.send("Success"))
     .then(() => sendEventsToAll({ ...req.body, type: "ירי" }))
+    .then(() => res.send("Success"))
     .catch(error => {
       console.log(error.message);
       res.status(500).send(error ? error.message : "error");
@@ -128,5 +128,86 @@ router.get("/allEventsReported", function(req, res) {
     res.send(results.map(result => result.rows))
   );
 });
+
+const kidnappingEvents = "SELECT * FROM kidnapping_event ORDER BY date";
+const accidentEvents = "SELECT * FROM accident_event ORDER BY date";
+const shootingEvents = "SELECT * FROM shooting_event ORDER BY date";
+const stabbingEvents = "SELECT * FROM stabbing_event ORDER BY date";
+const allEvents = [
+  kidnappingEvents,
+  accidentEvents,
+  shootingEvents,
+  stabbingEvents
+];
+
+/*Get request that returns all the events with their dates and x,y coordinates */
+router.get("/allEventsReported", function(req, res) {
+  Promise.all(allEvents.map(query => client.query(query))).then(results =>
+    res.send(results.map(result => result.rows))
+  );
+});
+
+const kidnappingEventsJoin = `SELECT * FROM activity_user`;
+const accidentEventsJoin = `SELECT * FROM activity_user`;
+const shootingEventsJoin = `SELECT * FROM activity_user`;
+const stabbingEventsJoin = `SELECT * FROM activity_user`;
+const allEventsJoin = [
+  kidnappingEventsJoin,
+  accidentEventsJoin,
+  shootingEventsJoin,
+  stabbingEventsJoin
+];
+
+router.get("/usersNameReports", function(req, res) {
+  Promise.all(allEventsJoin.map(query => client.query(query))).then(results =>
+    res.send(results.map(result => result.rows))
+  );
+});
+
+
+
+let clients = [];
+let facts = [];
+
+function eventsHandler(request, response, next) {
+    console.log("eventsHandler")
+    const headers = {
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'no-cache'
+    };
+    response.writeHead(200, headers);
+
+    const data = `data: ${JSON.stringify(facts)}\n\n`;
+
+    response.write(data);
+
+    const clientId = Date.now();
+
+    const newClient = {
+        id: clientId,
+        response
+    };
+
+    clients.push(newClient);
+    request.on('close', () => {
+        console.log(`${clientId} Connection closed`);
+        clients = clients.filter(client => client.id !== clientId);
+    });
+
+}
+
+router.get('/subscribe', eventsHandler);
+
+router.get('/status', (request, response) => response.json({ clients: clients.length }));
+
+
+const sendEventsToAll=(newFact)=> {
+    console.log("sendEventsToAll");
+    clients.forEach(client => {
+        client.response.write(`data: ${JSON.stringify(newFact)}\n\n`)
+    })
+}
+
 
 module.exports = router;

@@ -5,7 +5,7 @@ const db = new Client({
     host: '172.30.196.58',
     database: 'securityapptwodb',
     password: 'mtgand6',
-    port: 31000,
+    port: 5432,
 });
 
 db.connect()
