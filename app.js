@@ -17,8 +17,6 @@ var deRouter = require('./routes/de');
 
 var app = express();
 
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -30,9 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
-    cors({
-        origin: '[http://alpha-maps-git-tmzmap2.apps.openforce.openforce.biz/, http://localhost:8080, *]',
-    })
+    cors()
 );
 
 app.use('/reports', reportsRouter);
