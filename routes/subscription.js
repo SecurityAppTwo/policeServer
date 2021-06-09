@@ -25,11 +25,19 @@ router.get('/status', (request, response) => response.json({ clients: clients.le
 //         response
 //     };
 
+<<<<<<< HEAD
 //     clients.push(newClient);
 // //     request.on('close', () => {
 // //         console.log(`${clientId} Connection closed`);
 // //         clients = clients.filter(client => client.id !== clientId);
 // //     });
+=======
+    clients.push(newClient);
+    request.on('close', () => {
+        console.log(`${clientId} Connection closed`);
+        clients = clients.filter(client => client.id !== clientId);
+    });
+>>>>>>> 94eb14161e25ce9b76cc3a14840a6e073ed6be3f
 
 // }
 
