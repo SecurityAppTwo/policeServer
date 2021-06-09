@@ -11,7 +11,7 @@ var mapRouter = require('./routes/map');
 var usersRouter = require('./routes/users');
 const sub= require('./routes/subscription.js');
 const subscriptionRouter=sub.router;
-const sendEventsToAll=sub.sendEventsToAll;
+// const sendEventsToAll=sub.sendEventsToAll;
 
 var deRouter = require('./routes/de');
 
