@@ -75,8 +75,8 @@ router.post("/add/accidentEvent", function(req, res) {
         )`;
   client
     .query(addAccidentQuery)
-    .then(() => res.send("Success"))
     .then(() => sendEventsToAll({ ...req.body, type: "תאונה" }))
+    .then(() => res.send("Success"))
     .catch(error => res.status(500).send(error ? error.message : "error"));
 });
 
