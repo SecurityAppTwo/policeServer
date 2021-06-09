@@ -6,12 +6,13 @@ let clients = [];
 let facts = [];
 
 function eventsHandler(request, response, next) {
-    // const headers = {
-    //     'Content-Type': 'text/event-stream',
-    //     'Connection': 'keep-alive',
-    //     'Cache-Control': 'no-cache'
-    // };
-    // response.writeHead(200, headers);
+    console.log("eventsHandler")
+    const headers = {
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive',
+        'Cache-Control': 'no-cache'
+    };
+    response.writeHead(200, headers);
 
     const data = `data: ${JSON.stringify(facts)}\n\n`;
 
@@ -36,6 +37,7 @@ router.get('/events', eventsHandler);
 
 
 const sendEventsToAll=(newFact)=> {
+    console.log("sendEventsToAll");
     clients.forEach(client => {
         client.response.write(`data: ${JSON.stringify(newFact)}\n\n`)
     })
