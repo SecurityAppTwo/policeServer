@@ -104,14 +104,10 @@ router.post("/add/shootingEvent", function(req, res) {
     .catch(error => res.status(500).send(error ? error.message : "error"));
 });
 
-const kidnappingEvents =
-  "SELECT type, last_location , date FROM kidnapping_event ORDER BY date";
-const accidentEvents =
-  "SELECT type, injured_count ,date FROM accident_event ORDER BY date";
-const shootingEvents =
-  "SELECT type, injured_count , date FROM shooting_event ORDER BY date";
-const stabbingEvents =
-  "SELECT type, injured_count , date FROM stabbing_event ORDER BY date";
+const kidnappingEvents = "SELECT * FROM kidnapping_event ORDER BY date";
+const accidentEvents = "SELECT * FROM accident_event ORDER BY date";
+const shootingEvents = "SELECT * FROM shooting_event ORDER BY date";
+const stabbingEvents = "SELECT * FROM stabbing_event ORDER BY date";
 const allEvents = [
   kidnappingEvents,
   accidentEvents,
@@ -122,6 +118,31 @@ const allEvents = [
 /*Get request that returns all the events with their dates and x,y coordinates */
 router.get("/allEventsReported", function(req, res) {
   Promise.all(allEvents.map(query => client.query(query))).then(results =>
+    res.send(results.map(result => result.rows))
+  );
+});
+
+const kidnappingEventsJoin = `SELECT name FROM activity_user
+LEFT JOIN kidnapping_event ON
+activity_user.id = kidnapping_event.reported_by`;
+const accidentEventsJoin = `SELECT name FROM activity_user
+LEFT JOIN accident_event ON
+activity_user.id = accident_event.reported_by`;
+const shootingEventsJoin = `SELECT name FROM activity_user
+LEFT JOIN shooting_event ON
+activity_user.id = shooting_event.reported_by`;
+const stabbingEventsJoin = `SELECT name FROM activity_user
+LEFT JOIN stabbing_event ON
+activity_user.id = stabbing_event.reported_by`;
+const allEventsJoin = [
+  kidnappingEventsJoin,
+  accidentEventsJoin,
+  shootingEventsJoin,
+  stabbingEventsJoin
+];
+
+router.get("/usersNameReports", function(req, res) {
+  Promise.all(allEventsJoin.map(query => client.query(query))).then(results =>
     res.send(results.map(result => result.rows))
   );
 });
