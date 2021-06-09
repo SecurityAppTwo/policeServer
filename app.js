@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
     cors({
-        origin: JSON.parse(`${process.env.CORS_ALLOWED_ORIGINS}`),
+        origin: '*',
     })
 );
 
