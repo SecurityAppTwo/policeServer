@@ -107,34 +107,12 @@ router.post("/add/shootingEvent", function(req, res) {
     });
 });
 
-const kidnappingEvents =
-  "SELECT type, last_location , date FROM kidnapping_event ORDER BY date";
-const accidentEvents =
-  "SELECT type, injured_count ,date FROM accident_event ORDER BY date";
-const shootingEvents =
-  "SELECT type, injured_count , date FROM shooting_event ORDER BY date";
-const stabbingEvents =
-  "SELECT type, injured_count , date FROM stabbing_event ORDER BY date";
-const allEvents = [
-  kidnappingEvents,
-  accidentEvents,
-  shootingEvents,
-  stabbingEvents
-];
-
-/*Get request that returns all the events with their dates and x,y coordinates */
-router.get("/allEventsReported", function(req, res) {
-  Promise.all(allEvents.map(query => client.query(query))).then(results =>
-    res.send(results.map(result => result.rows))
-  );
-});
-
-const kidnappingEvents = "SELECT * FROM kidnapping_event ORDER BY date";
+const kidnappingEvent = "SELECT * FROM kidnapping_event ORDER BY date";
 const accidentEvents = "SELECT * FROM accident_event ORDER BY date";
 const shootingEvents = "SELECT * FROM shooting_event ORDER BY date";
 const stabbingEvents = "SELECT * FROM stabbing_event ORDER BY date";
 const allEvents = [
-  kidnappingEvents,
+  kidnappingEvent,
   accidentEvents,
   shootingEvents,
   stabbingEvents
@@ -164,50 +142,47 @@ router.get("/usersNameReports", function(req, res) {
   );
 });
 
-
-
 let clients = [];
 let facts = [];
 
 function eventsHandler(request, response, next) {
-    console.log("eventsHandler")
-    const headers = {
-        'Content-Type': 'text/event-stream',
-        'Connection': 'keep-alive',
-        'Cache-Control': 'no-cache'
-    };
-    response.writeHead(200, headers);
+  console.log("eventsHandler");
+  const headers = {
+    "Content-Type": "text/event-stream",
+    Connection: "keep-alive",
+    "Cache-Control": "no-cache"
+  };
+  response.writeHead(200, headers);
 
-    const data = `data: ${JSON.stringify(facts)}\n\n`;
+  const data = `data: ${JSON.stringify(facts)}\n\n`;
 
-    response.write(data);
+  response.write(data);
 
-    const clientId = Date.now();
+  const clientId = Date.now();
 
-    const newClient = {
-        id: clientId,
-        response
-    };
+  const newClient = {
+    id: clientId,
+    response
+  };
 
-    clients.push(newClient);
-    request.on('close', () => {
-        console.log(`${clientId} Connection closed`);
-        clients = clients.filter(client => client.id !== clientId);
-    });
-
+  clients.push(newClient);
+  request.on("close", () => {
+    console.log(`${clientId} Connection closed`);
+    clients = clients.filter(client => client.id !== clientId);
+  });
 }
 
-router.get('/subscribe', eventsHandler);
+router.get("/subscribe", eventsHandler);
 
-router.get('/status', (request, response) => response.json({ clients: clients.length }));
+router.get("/status", (request, response) =>
+  response.json({ clients: clients.length })
+);
 
-
-const sendEventsToAll=(newFact)=> {
-    console.log("sendEventsToAll");
-    clients.forEach(client => {
-        client.response.write(`data: ${JSON.stringify(newFact)}\n\n`)
-    })
-}
-
+const sendEventsToAll = newFact => {
+  console.log("sendEventsToAll");
+  clients.forEach(client => {
+    client.response.write(`data: ${JSON.stringify(newFact)}\n\n`);
+  });
+};
 
 module.exports = router;

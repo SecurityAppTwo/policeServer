@@ -1,32 +1,19 @@
-<<<<<<< HEAD
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var cors = require("cors");
+const cors = require("cors");
 
+var reportsRouter = require("./routes/reports");
 var mapRouter = require("./routes/map");
 var usersRouter = require("./routes/users");
+var activitiesRouter = require("./routes/activity");
+const sub = require("./routes/subscription.js");
+const subscriptionRouter = sub.router;
+const sendEventsToAll = sub.sendEventsToAll;
+
 var deRouter = require("./routes/de");
-=======
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-const cors = require('cors');
-
-
-var reportsRouter = require('./routes/reports');
-var mapRouter = require('./routes/map');
-var usersRouter = require('./routes/users');
-const sub= require('./routes/subscription.js');
-const subscriptionRouter=sub.router;
-const sendEventsToAll=sub.sendEventsToAll;
-
-var deRouter = require('./routes/de');
->>>>>>> 59bfada6e29fd35e34643ec45a2cb6eece92d027
 
 var app = express();
 
@@ -41,23 +28,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(cors());
 
-<<<<<<< HEAD
-app.use("/map", mapRouter);
-app.use("/users", usersRouter);
-app.use("/de", deRouter);
-=======
 app.use(
-    cors({
-        origin: '*'
-    })
+  cors({
+    origin: "*"
+  })
 );
 
-app.use('/reports', reportsRouter);
-app.use('/map', mapRouter);
-app.use('/users', usersRouter);
-app.use('/',subscriptionRouter);
-app.use('/de', deRouter);
->>>>>>> 59bfada6e29fd35e34643ec45a2cb6eece92d027
+app.use("/reports", reportsRouter);
+app.use("/map", mapRouter);
+app.use("/users", usersRouter);
+app.use("/", subscriptionRouter);
+app.use("/de", deRouter);
+app.use("/activities", activitiesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
