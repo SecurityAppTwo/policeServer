@@ -10,6 +10,7 @@ var reportsRouter = require('./routes/reports');
 var mapRouter = require('./routes/map');
 var usersRouter = require('./routes/users');
 const sub= require('./routes/subscription.js');
+const activityRouter= require('./routes/activity.js');
 const subscriptionRouter=sub.router;
 const sendEventsToAll=sub.sendEventsToAll;
 
@@ -38,6 +39,7 @@ app.use('/map', mapRouter);
 app.use('/users', usersRouter);
 app.use('/',subscriptionRouter);
 app.use('/de', deRouter);
+app.use('/activities', activityRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
